@@ -1,0 +1,9 @@
+Date Ranges Overlap =
+IF (
+    ( Dates[B-Start] >= Dates[A-Start]
+        && Dates[B-Start] <= Dates[A-End] )
+        || ( Dates[B-End] >= Dates[A-Start]
+        && Dates[B-End] <= Dates[A-End] ),
+    "Overlap",
+    "No Overlap"
+)
