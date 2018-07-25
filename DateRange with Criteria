@@ -1,0 +1,10 @@
+CAISO DATE =
+CALCULATE (
+    [Invoice Date],
+    FILTER (
+        ALL ( 'CAISO Calendar' ),
+        'CAISO Calendar'[StartDate] <= 'Settlements'[Trade Date]
+            && 'CAISO Calendar'[EndDate] >= 'Settlements'[Trade Date]
+            && 'CAISO Calendar'[Period] = Settlements[Settlement Type]
+    )
+)
