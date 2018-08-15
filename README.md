@@ -1,2 +1,2 @@
 # DAX
-DAX Autocalendar
+DAX Functions for Power BI
