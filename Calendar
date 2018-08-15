@@ -1,0 +1,18 @@
+Dates DIM = 
+VAR BaseCalendar =
+    CALENDAR (DATE([Start Year],1,1),DATE([Start Year],12,31))
+RETURN
+    GENERATE (
+        BaseCalendar,
+        VAR BaseDate = [Date]
+        VAR YearDate = YEAR ( BaseDate )
+        VAR MonthNumber = MONTH ( BaseDate )
+        VAR DayNumber = DAY(BaseDate)
+        RETURN
+            ROW (
+                "Day", DayNumber,
+                "Year", YearDate,
+                "Month Number", MonthNumber,
+                "Month", FORMAT ( BaseDate, "mmmm" )
+            )
+    )
