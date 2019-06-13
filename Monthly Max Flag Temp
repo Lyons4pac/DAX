@@ -1,0 +1,20 @@
+// Data 
+let
+    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("ZdHBDYAgDIXhXTibSEFoexTHMO6/hpRIQp+HXr6QPwXuO9BOe4okYQtnH+HwbE5bHz1Qrz5VP01rgTOqFaSgWkFmIa+FKqhjh59ageunx1rQiGoFVtRRmN3iChXV3aK4wnyz6goZdRR+agWKc2F2n0GobRxOyNf6PuK2UNS2vrC4e/Szzws=", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type text) meta [Serialized.Text = true]) in type table [Date = _t, Category = _t, Value = _t]),
+    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Date", type date}, {"Category", type text}, {"Value", Int64.Type}})
+in
+    #"Changed Type"
+******************************************************************    
+//Calendar Dax
+Calendar = CALENDARAUTO()
+*******************************************************************
+// Relate date in the two tables
+*************************************************************
+//Creat Measure to Flag the Day with the max temperature within a month
+Measure = 
+VAR MaxHrly = MAX('Data'[Value])
+//VAR MYTD = CALCULATE(SUM(Data[Value]),DATESMTD('Calendar'[Date]))
+VAR MaxMYTD = CALCULATE(MAX('Data'[Value]),DATESMTD('Calendar'[Date]))
+VAR MaxMonthly = CALCULATE(MAX('Data'[Value]),DATESBETWEEN('Calendar'[Date],STARTOFMONTH('Calendar'[Date]),ENDOFMONTH('Calendar'[Date])))
+RETURN 
+    if(ISBLANK(MaxHrly),BLANK(),IF(MaxHrly=MaxMonthly,"Max Day",BLANK()))
