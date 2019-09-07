@@ -1,18 +1,28 @@
-Dim_Time5m =
+Dim_Time = 
+
+//Generate hour table 1-24
 VAR vHour =
     SELECTCOLUMNS ( GENERATESERIES ( 1, 24 ), "Hour", [Value] )
-VAR Interval =
+//Generate 5 minute interval table 5-60
+VAR vInterval =
     SELECTCOLUMNS ( GENERATESERIES ( 5, 60, 5 ), "Interval", [Value] )
-VAR TempTable =
-    CROSSJOIN ( vHour, Interval )
+//Crossjoin hour and 5m interval table for 288 rows
+VAR vTempTable =
+    CROSSJOIN ( vHour, vInterval )
+
 RETURN
+//return the crossjoined vTempTable with Hour and Interval
     GENERATE (
-        TempTable,
+        vTempTable,
+        //Pad the hour so will have leading zero for all single digits
         VAR HourPad =
             FORMAT ( [Hour], "00" )
+        //Pad the 5m intervall to have leading zero for all single digits
         VAR IntervalPad =
             FORMAT ( [Interval], "00" )
+        //concatenate Hour pad and Interval pad
         VAR HourIntervalPad = HourPad & IntervalPad
+        //add the HourInterval to the table
         RETURN
             ROW ( "HourInterval", HourIntervalPad )
     )
