@@ -1,0 +1,18 @@
+Dim_Time5m =
+VAR vHour =
+    SELECTCOLUMNS ( GENERATESERIES ( 1, 24 ), "Hour", [Value] )
+VAR Interval =
+    SELECTCOLUMNS ( GENERATESERIES ( 5, 60, 5 ), "Interval", [Value] )
+VAR TempTable =
+    CROSSJOIN ( vHour, Interval )
+RETURN
+    GENERATE (
+        TempTable,
+        VAR HourPad =
+            FORMAT ( [Hour], "00" )
+        VAR IntervalPad =
+            FORMAT ( [Interval], "00" )
+        VAR HourIntervalPad = HourPad & IntervalPad
+        RETURN
+            ROW ( "HourInterval", HourIntervalPad )
+    )
